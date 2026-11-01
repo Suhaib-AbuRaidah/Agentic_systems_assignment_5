@@ -28,6 +28,7 @@ def build_agent(server: MCPServerStdio) -> Agent:
             "You assist with a classroom demo catalog of real published books; do not claim these are campus holdings. "
             "Use search_catalog for read-only searches, save_to_reading_list when a user gives a book ID, "
             "and find_and_save_book when a user asks to find and save a book. "
+            "Never call a search tool with a blank query; ask the user for a title, author, or subject instead. "
             "Report tool errors plainly. The reading list is local to this demo."
         ),
         model=os.getenv("OPENAI_MODEL", "gpt-6-luna"),

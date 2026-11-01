@@ -26,6 +26,19 @@ STATIC = Path(__file__).with_name("web_static")
 CHAT_LOCK = threading.Lock()
 
 
+class AgentRuntime:
+    """Keep one event loop alive for the SDK's reusable async client."""
+
+    def __init__(self) -> None:
+        self.runner = asyncio.Runner()
+
+    def run(self, coroutine):
+        return self.runner.run(coroutine)
+
+    def close(self) -> None:
+        self.runner.close()
+
+
 def load_config() -> None:
     load_dotenv(ROOT / ".env", override=False)
 
@@ -171,10 +184,14 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json(429, {"error": "The agent is finishing another request. Try again shortly."})
             return
         try:
-            self.send_json(200, asyncio.run(run_agent(message.strip())))
+            self.send_json(200, self.server.agent_runtime.run(run_agent(message.strip())))
         except Exception as error:
-            print(f"Agent request failed: {type(error).__name__}", file=os.sys.stderr, flush=True)
-            self.send_json(502, {"error": "The agent request failed. Check the API key and network, then try again."})
+            detail = str(error)
+            api_key = os.getenv("OPENAI_API_KEY", "")
+            if api_key:
+                detail = detail.replace(api_key, "<redacted API key>")
+            print(f"Agent request failed: {type(error).__name__}: {detail}", file=os.sys.stderr, flush=True)
+            self.send_json(502, {"error": "The agent request failed. See the terminal for details, then try again."})
         finally:
             CHAT_LOCK.release()
 
@@ -186,6 +203,7 @@ def main() -> None:
     args = parser.parse_args()
     load_config()
     server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
+    server.agent_runtime = AgentRuntime()
     url = f"http://127.0.0.1:{args.port}"
     print(f"Library Agent is ready at {url}", flush=True)
     if args.open:
@@ -196,6 +214,7 @@ def main() -> None:
         print("\nStopping Library Agent.")
     finally:
         server.server_close()
+        server.agent_runtime.close()
 
 
 if __name__ == "__main__":
