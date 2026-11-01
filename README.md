@@ -4,6 +4,8 @@ A local library agent demo with three MCP tools, a browser interface, and a pers
 
 ![Library Agent demo](Demo.gif)
 
+[Watch the screencast on YouTube](https://www.youtube.com/watch?v=ZRopVOM7Vnw)
+
 ## Tools
 
 | Tool | Purpose |
