@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "campus-library-mcp"
+version = "0.1.0"
+description = "Three-tool campus library MCP assignment"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastmcp>=4.1,<5",
+  "openai-agents>=0.7,<1",
+  "pydantic>=2,<3",
+  "python-dotenv>=1,<2",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+library-agent = "library_agent.client:main"
+library-mcp = "library_agent.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/library_agent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

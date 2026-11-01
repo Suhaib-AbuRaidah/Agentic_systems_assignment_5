@@ -1,0 +1,5 @@
+# Reflection
+
+I drew the boundary around whether a call changes state. `search_catalog` only reads the sample catalog, while `save_to_reading_list` writes one identified book to SQLite. The higher-level `find_and_save_book` first searches, checks that the result is unambiguous, and then saves. Keeping the search and save operations separate makes their effects clear to the agent and makes failures easier to explain. It also lets a user search without accidentally creating a reading-list entry.
+
+Three tools fit this small demonstration well because each has a distinct job and the orchestration tool adds a useful shortcut. The demo catalog now lists real published books, but it does not represent campus holdings. In a real library, I would replace the static catalog with a live catalog adapter, add authenticated user-specific reading lists, and consider a separate read tool to inspect saved entries. Those additions would need their own explicit interfaces and tests rather than more switches on the current tools.

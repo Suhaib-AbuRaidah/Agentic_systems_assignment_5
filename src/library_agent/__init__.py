@@ -1,0 +1,1 @@
+"""Campus library MCP toolkit."""

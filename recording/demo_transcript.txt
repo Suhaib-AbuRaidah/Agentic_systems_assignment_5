@@ -1,0 +1,74 @@
+[11/01/26 14:48:53] INFO     Starting MCP server                transport.py:241
+                             'campus-library' with transport                    
+                             'stdio' (stateless)                                
+Connected to MCP server. Available tools:
+  - search_catalog: DATA: Search the fictional demo catalog by title, author, subject, or ID. Never modifies the reading list. Rejects blank queries.
+  - save_to_reading_list: ACTION: Save one known book ID to a persistent local reading list. Rejects unknown IDs; duplicate saves are reported without adding a second row.
+  - find_and_save_book: ORCHESTRATION: Search the catalog, require exactly one match, then save it to the reading list. Rejects missing or ambiguous matches before writing.
+
+USER: Search the library catalog for MCP. Do not save anything.
+MCP ROUND TRIP [tool_call_item]: ResponseFunctionToolCall(arguments='{"query":"MCP"}', call_id='call_GgcyEr00yLvvaZwlOa7Rzj0p', name='search_catalog', type='function_call', id='fc_0f3f5d92feb4b8ea006ae7353a435c87d2b06f24038d7fb3df', async_=None, caller=None, namespace=None, status='completed')
+MCP ROUND TRIP [tool_call_output_item]: {'call_id': 'call_GgcyEr00yLvvaZwlOa7Rzj0p', 'output': [{'type': 'input_text', 'text': '{"query":"MCP","matches":[{"id":"LIB-102","title":"Introduction to Model Context Protocol","author":"Omar Nasser","subject":"MCP"}],"count":1}'}], 'type': 'function_call_output'}
+AGENT: Found one match in the fictional classroom catalog:
+
+- **Introduction to Model Context Protocol** — Omar Nasser (ID: LIB-102; subject: MCP)
+
+Nothing was saved.
+TOKENS: 542 input, 59 output, 601 total
+
+USER: Save book LIB-103 to my reading list.
+MCP ROUND TRIP [tool_call_item]: ResponseFunctionToolCall(arguments='{"book_id":"LIB-103"}', call_id='call_Od0Wcpfp8zvA8OYRuInZP4yE', name='save_to_reading_list', type='function_call', id='fc_0334e1466315e216006ae7353f22a487d286585f8915b3ae3f', async_=None, caller=None, namespace=None, status='completed')
+MCP ROUND TRIP [tool_call_output_item]: {'call_id': 'call_Od0Wcpfp8zvA8OYRuInZP4yE', 'output': [{'type': 'input_text', 'text': '{"book":{"id":"LIB-103","title":"Reliable Python Services","author":"Leila Mansour","subject":"Python"},"saved":true,"already_saved":false}'}], 'type': 'function_call_output'}
+AGENT: Saved *Reliable Python Services* by Leila Mansour (LIB-103) to your reading list.
+TOKENS: 542 input, 49 output, 591 total
+
+USER: Find Agent Tools in Practice and save it to my reading list.
+MCP ROUND TRIP [tool_call_item]: ResponseFunctionToolCall(arguments='{"query":"Agent Tools in Practice"}', call_id='call_1jme9s4rlm0Q2EW5EKnZ8i7q', name='find_and_save_book', type='function_call', id='fc_0621170041b1f9e7006ae735447ef487d29dae444ab297c086', async_=None, caller=None, namespace=None, status='completed')
+MCP ROUND TRIP [tool_call_output_item]: {'call_id': 'call_1jme9s4rlm0Q2EW5EKnZ8i7q', 'output': [{'type': 'input_text', 'text': '{"query":"Agent Tools in Practice","book":{"id":"LIB-101","title":"Agent Tools in Practice","author":"Maya Haddad","subject":"agent design"},"saved":true,"already_saved":false}'}], 'type': 'function_call_output'}
+AGENT: Found **Agent Tools in Practice** by Maya Haddad and saved it to your reading list.
+TOKENS: 555 input, 46 output, 601 total
+
+USER: Find quantum physics and save it to my reading list.
+[11/01/26 14:49:13] Error calling tool 'find_and_save_book'                     
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/suhaib/Agentic                                     │
+                    │ Systems/C5/.venv/lib/python3.12/site-packages/fastmcp/se │
+                    │ rver/server.py:1499 in call_tool                         │
+                    │                                                          │
+                    │ /home/suhaib/Agentic                                     │
+                    │ Systems/C5/.venv/lib/python3.12/site-packages/fastmcp/to │
+                    │ ols/base.py:452 in _run                                  │
+                    │                                                          │
+                    │                 ... 11 frames hidden ...                 │
+                    │                                                          │
+                    │ /home/suhaib/Agentic                                     │
+                    │ Systems/C5/src/library_agent/server.py:27 in             │
+                    │ find_and_save_book                                       │
+                    │                                                          │
+                    │   24 @mcp.tool()                                         │
+                    │   25 def find_and_save_book(query: str) -> FindAndSaveRe │
+                    │   26 │   """ORCHESTRATION: Search the catalog, require e │
+                    │      reading list. Rejects missing or ambiguous matches  │
+                    │ ❱ 27 │   return library.find_and_save_book(query)        │
+                    │   28                                                     │
+                    │   29                                                     │
+                    │   30 def main() -> None:                                 │
+                    │                                                          │
+                    │ /home/suhaib/Agentic                                     │
+                    │ Systems/C5/src/library_agent/service.py:73 in            │
+                    │ find_and_save_book                                       │
+                    │                                                          │
+                    │   70 │   │   """Search, require exactly one match, then  │
+                    │   71 │   │   result = self.search_catalog(query)         │
+                    │   72 │   │   if result.count == 0:                       │
+                    │ ❱ 73 │   │   │   raise ValueError(f"No catalog book matc │
+                    │   74 │   │   if result.count > 1:                        │
+                    │   75 │   │   │   ids = ", ".join(book.id for book in res │
+                    │   76 │   │   │   raise ValueError(f"Search is ambiguous  │
+                    │      ID.")                                               │
+                    ╰──────────────────────────────────────────────────────────╯
+                    ValueError: No catalog book matches 'quantum physics'.      
+MCP ROUND TRIP [tool_call_item]: ResponseFunctionToolCall(arguments='{"query":"quantum physics"}', call_id='call_E1iQuqVfOwBVuJ9An2ns4iak', name='find_and_save_book', type='function_call', id='fc_0beb50aabfe115cb006ae73547f92087d2b11deb455edd6113', async_=None, caller=None, namespace=None, status='completed')
+MCP ROUND TRIP [tool_call_output_item]: {'call_id': 'call_E1iQuqVfOwBVuJ9An2ns4iak', 'output': [{'type': 'input_text', 'text': "Error calling tool 'find_and_save_book': No catalog book matches 'quantum physics'."}], 'type': 'function_call_output'}
+AGENT: I couldn’t save it: no catalog book matches “quantum physics.”
+TOKENS: 523 input, 41 output, 564 total

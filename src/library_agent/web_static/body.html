@@ -1,0 +1,79 @@
+<div class="ux-wrap library-shell">
+  <header class="library-header ux-rise" style="--i:0">
+    <div class="library-brand">
+      <span class="brand-mark" aria-hidden="true">L<span>·</span></span>
+      <div><strong>Library Agent</strong><small>CAMPUS / MCP WORKSPACE</small></div>
+    </div>
+    <div class="header-actions">
+      <button class="focus-toggle" id="focus-toggle" type="button" aria-pressed="false">Focus view</button>
+      <span class="ux-badge ux-badge--good" id="connection-badge"><span class="ux-badge__dot"></span>Local server ready</span>
+      <span class="model-tag" id="model-name">GPT-6 Luna</span>
+    </div>
+  </header>
+
+  <section class="library-hero ux-rise" style="--i:1">
+    <div>
+      <span class="ux-kicker">A SMALL, REAL AGENT WORKFLOW</span>
+      <h1 class="ux-thesis">Find your next <span class="lit">good read.</span></h1>
+      <p class="ux-lede">Explore real books in a small demo catalog. Ask the agent to search or save one, and watch each MCP tool call.</p>
+    </div>
+    <div class="hero-aside"><span class="hero-index">01 / 03</span><span>Search · Save · Find &amp; save</span><small>Real titles · demo collection</small></div>
+  </section>
+
+  <section class="ux-kpis library-kpis ux-rise" style="--i:2" aria-label="Workspace overview">
+    <div class="ux-panel ux-kpi ux-kpi--focus"><div class="ux-kpi__val" id="catalog-count">06</div><div class="ux-kpi__label">Catalog titles</div><div class="ux-kpi__trend">Searchable sample books</div></div>
+    <div class="ux-panel ux-kpi"><div class="ux-kpi__val">03</div><div class="ux-kpi__label">MCP tools</div><div class="ux-kpi__trend">Data · Action · Orchestration</div></div>
+    <div class="ux-panel ux-kpi"><div class="ux-kpi__val" id="saved-count">—</div><div class="ux-kpi__label">Reading list</div><div class="ux-kpi__trend">Saved on this computer</div></div>
+  </section>
+
+  <main class="workspace-grid ux-section">
+    <section class="ux-panel assistant-panel" aria-labelledby="assistant-title">
+      <div class="panel-heading"><div><span class="ux-section-title">AGENT CONVERSATION</span><h2 class="ux-h2" id="assistant-title">Ask the librarian</h2></div><span class="ux-badge ux-badge--accent"><span class="ux-badge__dot"></span>Live MCP</span></div>
+      <p class="panel-intro">Choose a starting point, or write your own request. Sending a message makes one model request and can call a tool.</p>
+      <div class="prompt-row" aria-label="Example requests">
+        <button class="prompt-chip" type="button" data-prompt="Search the catalog for Python. Do not save anything.">Search Python <span>↗</span></button>
+        <button class="prompt-chip" type="button" data-prompt="Save book LIB-104 to my reading list.">Save LIB-104 <span>↗</span></button>
+        <button class="prompt-chip" type="button" data-prompt="Find Designing Data-Intensive Applications and save it to my reading list.">Find &amp; save <span>↗</span></button>
+        <button class="prompt-chip" type="button" data-prompt="Find marine biology and save it to my reading list.">Try no match <span>↗</span></button>
+      </div>
+      <div class="conversation" id="conversation" role="log" aria-live="polite" aria-relevant="additions">
+        <div class="empty-conversation"><span class="empty-symbol" aria-hidden="true">✳</span><strong>Ready when you are.</strong><p>The agent can search six real books and manage your local reading list.</p></div>
+      </div>
+      <form id="chat-form" class="composer">
+        <label class="sr-only" for="message-input">Message to the library agent</label>
+        <textarea id="message-input" rows="2" maxlength="500" placeholder="Ask for a book, author, or subject…" required></textarea>
+        <button id="send-button" class="send-button" type="submit"><span>Send request</span><span aria-hidden="true">↗</span></button>
+      </form>
+      <div class="composer-foot"><span id="request-status" role="status">Your key stays on the server.</span><span id="usage-total">0 tokens used in this session</span></div>
+    </section>
+
+    <aside class="side-stack">
+      <section class="ux-panel activity-panel" aria-labelledby="activity-title">
+        <div class="panel-heading"><div><span class="ux-section-title">TOOL ACTIVITY</span><h2 class="ux-h3" id="activity-title">MCP round trip</h2></div><span class="signal" aria-hidden="true"></span></div>
+        <div id="activity-list" class="activity-list" aria-live="polite"><p class="quiet">Tool calls will appear here after you send a request.</p></div>
+      </section>
+      <section class="ux-panel reading-panel" aria-labelledby="reading-title">
+        <div class="panel-heading"><div><span class="ux-section-title">PERSISTENT STATE</span><h2 class="ux-h3" id="reading-title">Reading list</h2></div><span class="list-count" id="reading-count">0 books</span></div>
+        <div id="reading-list" class="reading-list"><p class="quiet">No books saved yet. Ask the agent to save one.</p></div>
+      </section>
+    </aside>
+  </main>
+
+  <section class="catalog-section ux-section ux-rise" style="--i:3" aria-labelledby="catalog-title">
+    <div class="catalog-heading"><div><span class="ux-section-title">THE SAMPLE COLLECTION</span><h2 class="ux-h2" id="catalog-title">Browse the catalog</h2></div><label class="catalog-search"><span class="sr-only">Filter catalog</span><input id="catalog-filter" class="ux-input" type="search" placeholder="Filter by title, author, subject…"></label></div>
+    <div class="ux-table-wrap"><div class="ux-table-scroll"><table class="ux-table" id="catalog-table"><thead><tr><th>Book ID</th><th>Title</th><th>Author</th><th>Subject</th><th>Status</th></tr></thead><tbody id="catalog-body"></tbody></table></div></div>
+    <p class="catalog-note" id="catalog-note">Real published books in a demo collection; campus availability is not implied.</p>
+  </section>
+
+  <section class="flow-section ux-section" aria-labelledby="flow-title">
+    <span class="ux-section-title">HOW A REQUEST MOVES</span><h2 class="ux-h2" id="flow-title">One path through three layers</h2>
+    <div class="flow-grid">
+      <div class="ux-node" data-accent="accent"><div class="ux-node__label">01 / HOST</div><div class="ux-node__title">Library agent</div><div class="ux-node__desc">Understands your request and picks a tool.</div></div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="ux-node" data-accent="accent2"><div class="ux-node__label">02 / CLIENT</div><div class="ux-node__title">MCP connection</div><div class="ux-node__desc">Sends typed calls over standard input and output.</div></div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="ux-node" data-accent="good"><div class="ux-node__label">03 / SERVER</div><div class="ux-node__title">Library tools</div><div class="ux-node__desc">Reads the catalog or writes the local reading list.</div></div>
+    </div>
+  </section>
+  <footer class="library-footer"><span>LIBRARY AGENT · C5 AGENT TOOLS</span><span>Interface adapted from the supplied UltraExplainer instrument dashboard template.</span></footer>
+</div>
