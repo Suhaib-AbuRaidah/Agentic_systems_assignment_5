@@ -50,4 +50,4 @@ For a command-line demo or local tests:
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest
 ```
 
-See [the demo guide](DEMO_GUIDE.md), [written summary](WRITTEN_SUMMARY.md), and [reflection](REFLECTION.md) for the assignment details.
+See the [written summary](WRITTEN_SUMMARY.md) and [reflection](REFLECTION.md) for the assignment details.

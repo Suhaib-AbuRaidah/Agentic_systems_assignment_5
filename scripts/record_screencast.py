@@ -67,7 +67,7 @@ CHAPTERS = [
     {
         "seconds": 30,
         "title": "Reflection and submission",
-        "note": "Source, written summary, reflection, and demo guide are in this project folder.",
+        "note": "Source, written summary, and reflection are in this project folder.",
         "body": "Project files\n\nREADME.md              setup and tool design\nWRITTEN_SUMMARY.md     MCP article + Fetch server critique\nREFLECTION.md          tool boundaries and next steps\nsrc/library_agent/     FastMCP server and agent client\ntests/                 behavior and protocol tests\n\nNext steps: connect a real catalog and add user accounts.\n\nThank you.",
         "voice": "Three tools felt right for this small use case. Search and save have separate responsibilities, while the third tool provides a common two step workflow. A real deployment would replace the static demo catalog with a live library source and add authenticated reading lists. The project folder includes the setup guide, source code, tests, written summary of the assigned article and Fetch server, and a short reflection. This concludes the demonstration.",
     },
